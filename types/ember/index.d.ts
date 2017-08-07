@@ -1293,22 +1293,28 @@ declare namespace Ember {
         decrementProperty(keyName: string, decrement?: number): number;
         endPropertyChanges(): Observable;
 
-        /**
-         * Retrieves the value of a property from the object
-         * @param keyName
-         * @returns {}
-         */
-        get(keyName: string): any;
 
-        /**
-         * Retrieves the value of a property from the object
-         * @param keyName
-         * @returns {}
-         */
-        get<T>(keyName: string): T;
-
-        getProperties(...args: string[]): {};
-        getProperties(keys: string[]): {};
+        get<K extends keyof this>(key: K): this[K];
+        getProperties<K extends keyof this>(list: K[]): Pick<this, K>
+        getProperties<K extends keyof this>(...list: K[]): Pick<this, K>
+        set<K extends keyof this>(key: K, value: this[K]): this[K];
+        setProperties<K extends keyof this>(hash: Pick<this, K>): Pick<this, K>;
+        // /**
+        //  * Retrieves the value of a property from the object
+        //  * @param keyName
+        //  * @returns {}
+        //  */
+        // get(keyName: string): any;
+        //
+        // /**
+        //  * Retrieves the value of a property from the object
+        //  * @param keyName
+        //  * @returns {}
+        //  */
+        // get<T>(keyName: string): T;
+        //
+        // getProperties(...args: string[]): {};
+        // getProperties(keys: string[]): {};
         getWithDefault(keyName: string, defaultValue: any): any;
         hasObserverFor(key: string): boolean;
         incrementProperty(keyName: string, increment?: number): number;
@@ -1316,8 +1322,8 @@ declare namespace Ember {
         propertyDidChange(keyName: string): Observable;
         propertyWillChange(keyName: string): Observable;
         removeObserver(key: string, target: any, method: Function | string): Observable;
-        set(keyName: string, value: any): Observable;
-        setProperties(hash: {}): Observable;
+        // set(keyName: string, value: any): Observable;
+        // setProperties(hash: {}): Observable;
         toggleProperty(keyName: string): any;
     }
     const Object: EmberClass<Object>;
@@ -2095,6 +2101,11 @@ declare namespace Ember {
         or(...args: string[]): ComputedProperty;
         readOnly(dependentString: string): ComputedProperty;
     };
+    function get<T, K extends keyof T>(obj: T, key: K): T[K]
+    function getProperties<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K>
+    function getProperties<T, K extends keyof T>(obj: T, ...list: K[]): Pick<T, K>
+    function set<T, K extends keyof T, V extends T[K]>(obj: T, key: K, value: V): V;
+    function setProperties<T, K extends keyof T>(obj: T, hash: Pick<T, K>): Pick<T, K>;
     // ReSharper restore DuplicatingLocalDeclaration
     function controllerFor(
         container: Container,
@@ -2125,9 +2136,6 @@ declare namespace Ember {
         context: any
     ): Controller;
     function generateGuid(obj: any, prefix?: string): string;
-    function get(obj: any, keyName: string): any;
-    function getProperties(obj: any, ...args: string[]): object;
-    function getProperties(obj: any, keys: string[]): object;
     /**
     getPath is deprecated since get now supports paths.
     **/
@@ -2210,12 +2218,10 @@ declare namespace Ember {
     function runInDebug(fn: Function): void;
     function runLoadHooks(name: string, object: any): void;
     function sendEvent(obj: any, eventName: string, params?: any[], actions?: any[]): boolean;
-    function set(obj: any, keyName: string, value: any): any;
     /**
     setPath is deprecated since set now supports paths.
     **/
     const setPath: typeof deprecateFunc;
-    function setProperties(self: any, hash: {}): any;
     function subscribe(pattern: string, object: any): void;
     function toLocaleString(): string;
     function toString(): string;

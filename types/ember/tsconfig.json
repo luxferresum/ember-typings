@@ -20,6 +20,10 @@
         "test/extend.ts",
         "test/object.ts",
         "test/mixin.ts",
-        "test/reopen.ts"
+        "test/reopen.ts",
+        "test/get.ts",
+        "test/get-properties.ts",
+        "test/set.ts",
+        "test/set-properties.ts"
     ]
 }
